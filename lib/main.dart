@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myshop/screens/product_detail_screen.dart';
 import 'package:myshop/screens/product_overview_screen.dart';
 
 void main() {
@@ -20,6 +21,9 @@ class MyApp extends StatelessWidget {
       ),
       // home: const MyHomePage(title: 'MyShop'),
       home:  ProductsOverviewScreen(),
+      routes: {
+        ProductDetailScreen.routName: (ctx) => ProductDetailScreen(),
+      },
     );
   }
 }
