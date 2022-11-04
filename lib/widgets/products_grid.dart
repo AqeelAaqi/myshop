@@ -3,10 +3,10 @@ import '../providers/products.dart';
 import '../widgets/product_item.dart';
 import 'package:provider/provider.dart';
 
-class ProductGrid extends StatelessWidget {
+class ProductsGrid extends StatelessWidget {
   final bool showFavorites;
 
-  ProductGrid(this.showFavorites);
+  ProductsGrid(this.showFavorites);
 
   @override
   Widget build(BuildContext context) {
@@ -24,11 +24,7 @@ class ProductGrid extends StatelessWidget {
             mainAxisSpacing: 10),
         itemBuilder: (ctx, index) => ChangeNotifierProvider.value(
               value:products[index],
-              child: ProductItem(
-                  // products[index].id,
-                  // products[index].title,
-                  // products[index].imageUrl,
-              ),
+              child: ProductItem(),
             ));
   }
 }
