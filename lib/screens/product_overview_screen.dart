@@ -60,7 +60,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
                 Icons.shopping_cart,
               ),
               onPressed: () {
-                Navigator.of(context).pushNamed(CartScreen.routName);
+                Navigator.of(context).pushNamed(CartScreen.routeName);
               },
             ),
           ),
