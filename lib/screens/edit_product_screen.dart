@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myshop/providers/product.dart';
+import 'package:myshop/providers/products.dart';
+import 'package:provider/provider.dart';
 
 class EditProductSreen extends StatefulWidget {
   static const routeName = '/edit-product';
@@ -12,7 +14,7 @@ class _EditProductSreenState extends State<EditProductSreen> {
   final _priceFocusNode = FocusNode();
   final _descriptionFocusNode = FocusNode();
   final _imageUrlFocusNode = FocusNode();
-  final _imageUrlControler = TextEditingController();
+  final _imageUrlController = TextEditingController();
   final _form = GlobalKey<FormState>();
   var _editedProduct =
       Product(id: null.toString(), title: '', description: '', imageUrl: '', price: 0);
@@ -26,20 +28,30 @@ class _EditProductSreenState extends State<EditProductSreen> {
 
   void _updateImageUrl() {
     if (!_imageUrlFocusNode.hasFocus) {
+      if ((!_imageUrlController.text.startsWith('http') &&
+          !_imageUrlController.text.startsWith('https')) ||
+          (!_imageUrlController.text.endsWith('.png') &&
+              !_imageUrlController.text.endsWith('.jpg') &&
+              !_imageUrlController.text.endsWith('.jpeg'))) {
+        return;
+      }
       setState(() {});
     }
   }
 
   void _saveForm() {
     final isValid = _form.currentState!.validate();
-    if(!isValid){
+    if (!isValid) {
       return;
     }
-    _form.currentState?.save();
-    print(_editedProduct.title);
-    print(_editedProduct.description);
-    print(_editedProduct.price);
-    print(_editedProduct.imageUrl);
+    _form.currentState!.save();
+    if (_editedProduct.id != null) {
+      Provider.of<Products>(context, listen: false)
+          .updateProduct(_editedProduct.id, _editedProduct);
+    } else {
+      Provider.of<Products>(context, listen: false).addProduct(_editedProduct);
+    }
+    Navigator.of(context).pop();
   }
 
   @override
@@ -49,7 +61,7 @@ class _EditProductSreenState extends State<EditProductSreen> {
     _priceFocusNode.dispose();
     _descriptionFocusNode.dispose();
     _imageUrlFocusNode.dispose();
-    _imageUrlControler.dispose();
+    _imageUrlController.dispose();
     super.dispose();
   }
 
@@ -100,6 +112,18 @@ class _EditProductSreenState extends State<EditProductSreen> {
                 onFieldSubmitted: (_) {
                   FocusScope.of(context).requestFocus(_descriptionFocusNode);
                 },
+                validator: (value) {
+                  if(value!.isEmpty){
+                    return 'PLease enter a price.';
+                  }
+                  if(double.tryParse(value) == null) {
+                    return 'Please enter a valid number.';
+                  }
+                  if(double.parse(value) <= 0){
+                    return 'Please enter a number greater than zero.';
+                  }
+                  return null;
+                },
                 onSaved: (value) {
                   _editedProduct = Product(
                     title: _editedProduct.title,
@@ -118,6 +142,15 @@ class _EditProductSreenState extends State<EditProductSreen> {
                 focusNode: _descriptionFocusNode,
                 onFieldSubmitted: (_) {
                   FocusScope.of(context).requestFocus(_priceFocusNode);
+                },
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Please enter a description.';
+                  }
+                  if (value.length < 10) {
+                    return 'Should be at least 10 characters long.';
+                  }
+                  return null;
                 },
                 onSaved: (value) {
                   _editedProduct = Product(
@@ -138,11 +171,11 @@ class _EditProductSreenState extends State<EditProductSreen> {
                     margin: EdgeInsets.only(top: 8, right: 10),
                     decoration:
                         BoxDecoration(border: Border.all(), color: Colors.grey),
-                    child: _imageUrlControler.text.isEmpty
+                    child: _imageUrlController.text.isEmpty
                         ? Text('Enter a Url')
                         : FittedBox(
                             child: Image.network(
-                              _imageUrlControler.text,
+                              _imageUrlController.text,
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -152,10 +185,25 @@ class _EditProductSreenState extends State<EditProductSreen> {
                       decoration: InputDecoration(labelText: 'Image URL'),
                       keyboardType: TextInputType.url,
                       textInputAction: TextInputAction.done,
-                      controller: _imageUrlControler,
+                      controller: _imageUrlController,
                       focusNode: _imageUrlFocusNode,
                       onEditingComplete: () {
                         setState(() {});
+                      },
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Please enter an image URL.';
+                        }
+                        if (!value.startsWith('http') &&
+                            !value.startsWith('https')) {
+                          return 'Please enter a valid URL.';
+                        }
+                        if (!value.endsWith('.png') &&
+                            !value.endsWith('.jpg') &&
+                            !value.endsWith('.jpeg')) {
+                          return 'Please enter a valid image URL.';
+                        }
+                        return null;
                       },
                       onSaved: (value) {
                         _editedProduct = Product(
