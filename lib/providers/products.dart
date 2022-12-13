@@ -69,17 +69,18 @@ class Products with ChangeNotifier {
   Future<void> addProduct(Product product) async {
     Uri url = Uri.parse(
         'https://flutter-practice-f96f3-default-rtdb.firebaseio.com/products.json');
-    return http.post(
-    // final http.Response response = await http.post(
-      url,
-      body: json.encode({
-        'title': product.title,
-        'description': product.description,
-        'imageUrl': product.imageUrl,
-        'price': product.price,
-        'isFavorite': product.isFavorite
-      }),
-    ).then((response) {
+    try{
+      final response = await http.post(
+        // final http.Response response = await http.post(
+        url,
+        body: json.encode({
+          'title': product.title,
+          'description': product.description,
+          'imageUrl': product.imageUrl,
+          'price': product.price,
+          'isFavorite': product.isFavorite
+        }),
+      );
       final newProduct = Product(
         title: product.title,
         description: product.description,
@@ -90,16 +91,10 @@ class Products with ChangeNotifier {
       _items.add(newProduct);
       // _items.insert(0, newProduct); // at the start of the list
       notifyListeners();
-
-      // if (response.statusCode == 201) {
-      //   return json.decode(response.body);
-      // } else {
-      //   throw Exception('Failed to create album.');
-      // }
-    }).catchError((error) {
-      print(error);
-      throw error;
-    });
+    }catch(exception){
+      print(exception);
+      throw exception;
+    }
   }
 
   void updateProduct(String id, Product newProduct) {
