@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class Products with ChangeNotifier {
-   List<Product> _items = [
+  List<Product> _items = [
     // Product(
     //   id: 'p1',
     //   title: 'Red Shirt',
@@ -69,7 +69,7 @@ class Products with ChangeNotifier {
   Future<void> fetchAndSetProducts() async {
     Uri url = Uri.parse(
         'https://flutter-practice-f96f3-default-rtdb.firebaseio.com/products.json');
-    try{
+    try {
       final response = await http.get(url);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
       final List<Product> loadedProducts = [];
@@ -85,16 +85,15 @@ class Products with ChangeNotifier {
       });
       _items = loadedProducts;
       notifyListeners();
-
-    }catch(Exception){
-      throw(Exception);
+    } catch (Exception) {
+      throw (Exception);
     }
   }
 
   Future<void> addProduct(Product product) async {
     Uri url = Uri.parse(
         'https://flutter-practice-f96f3-default-rtdb.firebaseio.com/products.json');
-    try{
+    try {
       final response = await http.post(
         // final http.Response response = await http.post(
         url,
@@ -111,23 +110,23 @@ class Products with ChangeNotifier {
         description: product.description,
         price: product.price,
         imageUrl: product.imageUrl,
-        id: json.decode(response.body) ['name'],
+        id: json.decode(response.body)['name'],
       );
       _items.add(newProduct);
       // _items.insert(0, newProduct); // at the start of the list
       notifyListeners();
-    }catch(exception){
+    } catch (exception) {
       print(exception);
       throw exception;
     }
   }
 
-  Future<void> updateProduct(String id, Product newProduct) async{
+  Future<void> updateProduct(String id, Product newProduct) async {
     final prodIndex = _items.indexWhere((prod) => prod.id == id);
     if (prodIndex >= 0) {
       Uri url = Uri.parse(
           'https://flutter-practice-f96f3-default-rtdb.firebaseio.com/products/$id.json');
-      try{
+      try {
         await http.patch(
           // final http.Response response = await http.post(
           url,
@@ -138,7 +137,7 @@ class Products with ChangeNotifier {
             'price': newProduct.price,
           }),
         );
-      }catch(exception){
+      } catch (exception) {
         print(exception);
         throw exception;
       }
@@ -150,7 +149,17 @@ class Products with ChangeNotifier {
   }
 
   void deleteProduct(String id) {
-    _items.removeWhere((prod) => prod.id == id);
+    Uri url = Uri.parse(
+        'https://flutter-practice-f96f3-default-rtdb.firebaseio.com/products/$id.json');
+    final existingProductIndex = _items.indexWhere((prod) => prod.id == id);
+    Product? existingProduct = _items[existingProductIndex];
+    http.delete(url).then((value) {
+      existingProduct = null;
+    }).catchError((onError) {
+      _items.insert(existingProductIndex, existingProduct!);
+      throw onError;
+    });
+    _items.removeAt(existingProductIndex);
     notifyListeners();
   }
 }
