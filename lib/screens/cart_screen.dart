@@ -14,8 +14,6 @@ class CartScreen extends StatefulWidget {
 }
 class _CartScreen extends State<CartScreen> {
 
-
-
   @override
   Widget build(BuildContext context) {
     final cart = Provider.of<Cart>(context);
@@ -70,10 +68,6 @@ class _CartScreen extends State<CartScreen> {
     );
   }
 
-  @override
-  void initState() {
-    Future.delayed(Duration.zero);
-  }
 }
 
 class OrderButton extends StatefulWidget {
