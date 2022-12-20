@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:myshop/providers/cart.dart';
 import 'package:myshop/providers/orders.dart';
 import 'package:myshop/providers/products.dart';
+import 'package:myshop/screens/auth_screen.dart';
 import 'package:myshop/screens/cart_screen.dart';
 import 'package:myshop/screens/edit_product_screen.dart';
 import 'package:myshop/screens/orders_screen.dart';
@@ -9,6 +10,8 @@ import 'package:myshop/screens/product_detail_screen.dart';
 import 'package:myshop/screens/product_overview_screen.dart';
 import 'package:myshop/screens/user_product_screen.dart';
 import 'package:provider/provider.dart';
+
+import 'providers/auth.dart';
 
 void main() {
   runApp(const MyApp());
@@ -23,8 +26,12 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (ctx) => Products(),
+          create: (ctx) => Auth(),
         ),
+        ChangeNotifierProxyProvider<Auth, Products>(
+            create: (ctx) => Products('', '', []),
+            update: (context, auth, previousProducts) => Products(
+                auth.token.toString(), auth.userId, previousProducts!.items)),
         ChangeNotifierProvider(
           create: (ctx) => Cart(),
         ),
@@ -32,22 +39,27 @@ class MyApp extends StatelessWidget {
           create: (ctx) => Orders(),
         ),
       ],
-      child: MaterialApp(
-        title: 'MyShop',
-        theme: ThemeData(
-          primarySwatch: Colors.purple,
-          accentColor: Colors.deepOrange,
-          fontFamily: 'Lato',
+      child: Consumer<Auth>(
+        builder: (ctx, auth, _) => MaterialApp(
+          title: 'MyShop',
+          theme: ThemeData(
+            primarySwatch: Colors.purple,
+            accentColor: Colors.deepOrange,
+            fontFamily: 'Lato',
+          ),
+          // home: const MyHomePage(title: 'MyShop'),
+          home: auth.isAuth ? ProductsOverviewScreen() : AuthScreen(),
+          // home: ProductsOverviewScreen(),
+          routes: {
+            ProductsOverviewScreen.routeName: (ctx) => ProductsOverviewScreen(),
+            ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),
+            CartScreen.routeName: (ctx) => CartScreen(),
+            OrdersScreen.routeName: (ctx) => OrdersScreen(),
+            UserProductsScreen.routeName: (ctx) => UserProductsScreen(),
+            EditProductScreen.routeName: (ctx) => EditProductScreen(),
+            AuthScreen.routeName: (ctx) => AuthScreen(),
+          },
         ),
-        // home: const MyHomePage(title: 'MyShop'),
-        home: ProductsOverviewScreen(),
-        routes: {
-          ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),
-          CartScreen.routeName: (ctx) => CartScreen(),
-          OrdersScreen.routeName: (ctx) => OrdersScreen(),
-          UserProductsScreen.routeName: (ctx) => UserProductsScreen(),
-          EditProductScreen.routeName: (ctx) => EditProductScreen(),
-        },
       ),
     );
   }
