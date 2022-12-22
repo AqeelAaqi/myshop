@@ -106,7 +106,6 @@ class Auth with ChangeNotifier {
     _expiryDate = null;
     if (_authTimer != null) {
       _authTimer!.cancel();
-      _authTimer = null;
     }
     notifyListeners();
     final prefs = await SharedPreferences.getInstance();
