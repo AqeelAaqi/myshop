@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myshop/providers/auth.dart';
 import 'package:myshop/providers/cart.dart';
 import 'package:myshop/providers/product.dart';
 import 'package:myshop/screens/product_detail_screen.dart';
@@ -10,6 +11,7 @@ class ProductItem extends StatelessWidget {
     // TODO: implement build
     final product = Provider.of<Product>(context, listen: false);
     final cart = Provider.of<Cart>(context, listen: false);
+    final authData = Provider.of<Auth>(context, listen: false);
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: GridTile(
@@ -18,7 +20,7 @@ class ProductItem extends StatelessWidget {
           onTap: () {
             Navigator.of(context).pushNamed(
               ProductDetailScreen.routeName,
-              arguments: product.id,
+              arguments: product.productId,
             );
           },
         ),
@@ -29,7 +31,8 @@ class ProductItem extends StatelessWidget {
               icon: Icon(
                   product.isFavorite ? Icons.favorite : Icons.favorite_border),
               onPressed: () {
-                product.toggelFavotiteStatus();
+                product.toggelFavotiteStatus(
+                    authData.token.toString(), authData.userId);
               },
               color: Theme.of(context).accentColor,
             ),
@@ -37,7 +40,7 @@ class ProductItem extends StatelessWidget {
           trailing: IconButton(
             icon: Icon(Icons.shopping_cart),
             onPressed: () {
-              cart.addItem(product.id, product.price, product.title);
+              cart.addItem(product.productId, product.price, product.title);
               Scaffold.of(context).hideCurrentSnackBar();
               Scaffold.of(context).showSnackBar(SnackBar(
                 content: Text(
@@ -47,7 +50,7 @@ class ProductItem extends StatelessWidget {
                 action: SnackBarAction(
                   label: 'UNDO',
                   onPressed: () {
-                    cart.removeSingleItem(product.id);
+                    cart.removeSingleItem(product.productId);
                   },
                 ),
               ));

@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class Product with ChangeNotifier {
-  final String id;
+  final String productId;
   final String title;
   final String description;
   final double price;
@@ -12,7 +12,7 @@ class Product with ChangeNotifier {
 
   Product(
       {
-        required this.id,
+        required this.productId,
         required this.title,
         required this.description,
         required this.price,
@@ -26,16 +26,15 @@ class Product with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> toggelFavotiteStatus() async{
+  Future<void> toggelFavotiteStatus(String authToken, String userId) async{
     final oldStatus = isFavorite;
     isFavorite = !isFavorite;
     notifyListeners();
     try{
       Uri url = Uri.parse(
-          'https://flutter-practice-f96f3-default-rtdb.firebaseio.com/products/$id.json');
-      final response = await http.patch(url,body: json.encode({
-        'isFavorite': isFavorite,
-      }));
+          'https://flutter-practice-f96f3-default-rtdb.firebaseio.com/userFavorites/$userId/$productId.json?auth=$authToken');
+      final response = await http.put(url,body: json.encode(isFavorite));
+
       if(response.statusCode >= 400){
         _setFavValue(oldStatus);
       }

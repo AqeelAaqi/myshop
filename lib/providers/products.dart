@@ -69,10 +69,11 @@ class Products with ChangeNotifier {
 //   }
 
   Product findById(String productId) {
-    return _items.firstWhere((element) => element.id == productId);
+    return _items.firstWhere((element) => element.productId == productId);
   }
 
-  Future<void> fetchAndSetProducts() async {
+  Future<void> fetchAndSetProducts([bool filterByUser = false]) async {
+      final filterString = filterByUser ? 'orderBy="creatorId"&equalTo="$userId"' : '';
     Uri url = Uri.parse(
         'https://flutter-practice-f96f3-default-rtdb.firebaseio.com/products.json?auth=$authToken');
     try {
@@ -82,13 +83,17 @@ class Products with ChangeNotifier {
       if (extractedData == null) {
         return;
       }
+      Uri favoriteUrl = Uri.parse(
+          'https://flutter-practice-f96f3-default-rtdb.firebaseio.com/userFavorites/$userId.json?auth=$authToken&$filterString');
+      final favoriteResponse = await http.get(favoriteUrl);
+      final favoriteData = json.decode(favoriteResponse.body);
       extractedData.forEach((prodId, prodData) {
         loadedProducts.add(Product(
-          id: prodId,
+          productId: prodId,
           title: prodData['title'],
           description: prodData['description'],
           price: prodData['price'].toDouble(),
-          isFavorite: prodData['isFavorite'],
+          isFavorite: favoriteData == null ? false :favoriteData[prodId] ?? false,
           imageUrl: prodData['imageUrl'],
         ));
       });
@@ -101,7 +106,7 @@ class Products with ChangeNotifier {
 
   Future<void> addProduct(Product product) async {
     Uri url = Uri.parse(
-        'https://flutter-practice-f96f3-default-rtdb.firebaseio.com/products.json');
+        'https://flutter-practice-f96f3-default-rtdb.firebaseio.com/products.json?auth=$authToken');
     try {
       final response = await http.post(
         // final http.Response response = await http.post(
@@ -111,7 +116,7 @@ class Products with ChangeNotifier {
           'description': product.description,
           'imageUrl': product.imageUrl,
           'price': product.price,
-          'isFavorite': product.isFavorite
+          'creatorId': userId,
         }),
       );
       final newProduct = Product(
@@ -119,7 +124,7 @@ class Products with ChangeNotifier {
         description: product.description,
         price: product.price,
         imageUrl: product.imageUrl,
-        id: json.decode(response.body)['name'],
+        productId: json.decode(response.body)['name'],
       );
       _items.add(newProduct);
       // _items.insert(0, newProduct); // at the start of the list
@@ -131,10 +136,10 @@ class Products with ChangeNotifier {
   }
 
   Future<void> updateProduct(String id, Product newProduct) async {
-    final prodIndex = _items.indexWhere((prod) => prod.id == id);
+    final prodIndex = _items.indexWhere((prod) => prod.productId == id);
     if (prodIndex >= 0) {
       Uri url = Uri.parse(
-          'https://flutter-practice-f96f3-default-rtdb.firebaseio.com/products/$id.json');
+          'https://flutter-practice-f96f3-default-rtdb.firebaseio.com/products/$id.json?auth=$authToken');
       try {
         await http.patch(
           // final http.Response response = await http.post(
@@ -159,8 +164,8 @@ class Products with ChangeNotifier {
 
   Future<void> deleteProduct(String id) async {
     Uri url = Uri.parse(
-        'https://flutter-practice-f96f3-default-rtdb.firebaseio.com/products/$id.json');
-    final existingProductIndex = _items.indexWhere((prod) => prod.id == id);
+        'https://flutter-practice-f96f3-default-rtdb.firebaseio.com/products/$id.json?auth=$authToken');
+    final existingProductIndex = _items.indexWhere((prod) => prod.productId == id);
     Product? existingProduct = _items[existingProductIndex];
     _items.removeAt(existingProductIndex);
     notifyListeners();

@@ -17,7 +17,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
   final _imageUrlFocusNode = FocusNode();
   final _form = GlobalKey<FormState>();
   var _editedProduct = Product(
-    id: '',
+    productId: '',
     title: '',
     price: 0,
     description: '',
@@ -91,9 +91,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
     setState(() {
       _isLoading = true;
     });
-    if (_editedProduct.id.isNotEmpty) {
+    if (_editedProduct.productId.isNotEmpty) {
       Provider.of<Products>(context, listen: false)
-          .updateProduct(_editedProduct.id, _editedProduct);
+          .updateProduct(_editedProduct.productId, _editedProduct);
     } else {
       try{
         await Provider.of<Products>(context, listen: false)
@@ -161,7 +161,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                             price: _editedProduct.price,
                             description: _editedProduct.description,
                             imageUrl: _editedProduct.imageUrl,
-                            id: _editedProduct.id,
+                            productId: _editedProduct.productId,
                             isFavorite: _editedProduct.isFavorite);
                       },
                     ),
@@ -193,7 +193,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                             price: double.parse(value.toString()),
                             description: _editedProduct.description,
                             imageUrl: _editedProduct.imageUrl,
-                            id: _editedProduct.id,
+                            productId: _editedProduct.productId,
                             isFavorite: _editedProduct.isFavorite);
                       },
                     ),
@@ -218,7 +218,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                           price: _editedProduct.price,
                           description: value.toString(),
                           imageUrl: _editedProduct.imageUrl,
-                          id: _editedProduct.id,
+                          productId: _editedProduct.productId,
                           isFavorite: _editedProduct.isFavorite,
                         );
                       },
@@ -279,7 +279,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                                 price: _editedProduct.price,
                                 description: _editedProduct.description,
                                 imageUrl: value.toString(),
-                                id: _editedProduct.id,
+                                productId: _editedProduct.productId,
                                 isFavorite: _editedProduct.isFavorite,
                               );
                             },
