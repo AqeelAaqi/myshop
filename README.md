@@ -2,6 +2,18 @@
 
 A new Flutter project.
 
+## Features
+
+- Firebase Realtime Database
+- Firebase Authentication
+- State Management (Provider)
+- Create, Read, Update, Delete, Product
+- Bookmark/Favorite Product
+- Search Product
+- Read Orders
+- Login/Logout
+- Session
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
