@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myshop/helpers/custom_route.dart';
 import 'package:myshop/providers/cart.dart';
 import 'package:myshop/providers/orders.dart';
 import 'package:myshop/providers/products.dart';
@@ -49,11 +50,11 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.purple,
             accentColor: Colors.deepOrange,
             fontFamily: 'Lato',
-            // pageTransitionsTheme: PageTransitionsTheme(builders: {
-            //   TargetPlatform.android: ,
-            //   TargetPlatform.iOS :,
-            // },
-            // ),
+            pageTransitionsTheme: PageTransitionsTheme(builders: {
+              TargetPlatform.android: CustomPageTransitionBuilder(),
+              TargetPlatform.iOS : CustomPageTransitionBuilder(),
+            },
+            ),
           ),
           // home: const MyHomePage(title: 'MyShop'),
           home: auth.isAuth
