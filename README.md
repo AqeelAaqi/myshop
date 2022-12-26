@@ -42,7 +42,7 @@ flutter run
 | ![](assets/images/4.png) | ![](assets/images/5.png) | ![](assets/images/6.png) |
 | ![](assets/images/7.png) |
 
-<p align='center'>Made With ❤️ By <a href="https://github.com/vikiwarrior">Vikrant</a></p>
+<p align='center'>Made With ❤️ By <a href="https://github.com/AqeelAaqi/myshop">Aqeel</a></p>
 
 A few resources to get you started if this is your first Flutter project:
 
