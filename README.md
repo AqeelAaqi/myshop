@@ -27,7 +27,7 @@ Uses Firebase Realtime Database .
 
 * Fork the repo and clone it.
 ```
-https://github.com/vikiwarrior/MyShop.git
+https://github.com/AqeelAaqi/myshop
 ```
 * In the same directory run the following commands(considering you have flutter installed and an android device connected)
 ```
