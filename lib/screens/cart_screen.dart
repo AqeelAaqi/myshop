@@ -86,8 +86,8 @@ class _OrderButton extends State<OrderButton>{
   var _isLoading = false;
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
-      child: _isLoading ? CircularProgressIndicator():Text('ORDER NOW'),
+    return TextButton(
+      child: _isLoading ? CircularProgressIndicator():Text('ORDER NOW', style: TextStyle(color: Theme.of(context).primaryColor),),
       onPressed: (widget.cart.totalAmount <= 0 || _isLoading)? null :() async{
         setState(() {
           _isLoading = true;
@@ -98,7 +98,6 @@ class _OrderButton extends State<OrderButton>{
         });
         widget.cart.clearCart();
       },
-      textColor: Theme.of(context).primaryColor,
     );
   }
 }

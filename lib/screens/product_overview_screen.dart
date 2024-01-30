@@ -3,8 +3,8 @@ import 'package:myshop/providers/products.dart';
 import 'package:myshop/widgets/app_drawer.dart';
 import 'package:provider/provider.dart';
 
+import '../widgets/badges.dart';
 import '../widgets/products_grid.dart';
-import '../widgets/badge.dart';
 import '../providers/cart.dart';
 import 'cart_screen.dart';
 
@@ -84,7 +84,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
             ],
           ),
           Consumer<Cart>(
-            builder: (_, cart, ch) => Badge(
+            builder: (_, cart, ch) => Badges(
               child: ch as Widget,
               value: cart.itemCount.toString(),
               color: Colors.deepOrange,

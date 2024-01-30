@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
           title: 'MyShop',
           theme: ThemeData(
             primarySwatch: Colors.purple,
-            accentColor: Colors.deepOrange,
+            hintColor: Colors.deepOrange,
             fontFamily: 'Lato',
             pageTransitionsTheme: PageTransitionsTheme(builders: {
               TargetPlatform.android: CustomPageTransitionBuilder(),

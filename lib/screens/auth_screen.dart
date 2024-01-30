@@ -60,10 +60,7 @@ class AuthScreen extends StatelessWidget {
                       child: Text(
                         'My Shop',
                         style: TextStyle(
-                          color: Theme.of(context)
-                              .accentTextTheme
-                              .subtitle1
-                              ?.color,
+                          color: Colors.amber,
                           fontSize: 50,
                           fontFamily: 'Anton',
                           fontWeight: FontWeight.normal,
@@ -146,7 +143,7 @@ class _AuthCardState extends State<AuthCard>
               title: Text('An Error Occurred'),
               content: Text(message),
               actions: <Widget>[
-                FlatButton(
+                TextButton(
                     onPressed: () {
                       Navigator.pop(context);
                     },
@@ -291,7 +288,7 @@ class _AuthCardState extends State<AuthCard>
                 if (_isLoading)
                   CircularProgressIndicator()
                 else
-                  RaisedButton(
+                  MaterialButton(
                     child:
                         Text(_authMode == AuthMode.Login ? 'LOGIN' : 'SIGN UP'),
                     onPressed: _submit,
@@ -303,7 +300,7 @@ class _AuthCardState extends State<AuthCard>
                     color: Theme.of(context).primaryColor,
                     textColor: Theme.of(context).primaryTextTheme.button!.color,
                   ),
-                FlatButton(
+                MaterialButton(
                   child: Text(
                       '${_authMode == AuthMode.Login ? 'SIGNUP' : 'LOGIN'} INSTEAD'),
                   onPressed: _switchAuthMode,

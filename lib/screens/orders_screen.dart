@@ -47,7 +47,7 @@ class _OrderScreen extends State<OrdersScreen> {
               return Consumer<ord.Orders>(builder: (ctx, orderData, child) => ListView.builder(
                   itemCount: orderData.orders.length,
                   itemBuilder: (ctx, index) =>
-                      OrderItem(orderData.orders[index])));
+                      OrderItem(orderData.orders[index])),);
             }
           }
         },

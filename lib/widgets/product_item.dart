@@ -42,15 +42,15 @@ class ProductItem extends StatelessWidget {
                 product.toggelFavotiteStatus(
                     authData.token.toString(), authData.userId);
               },
-              color: Theme.of(context).accentColor,
+              color: Colors.amber,
             ),
           ),
           trailing: IconButton(
             icon: Icon(Icons.shopping_cart),
             onPressed: () {
               cart.addItem(product.productId, product.price, product.title);
-              Scaffold.of(context).hideCurrentSnackBar();
-              Scaffold.of(context).showSnackBar(SnackBar(
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text(
                   'Added item to Cart!',
                 ),
@@ -63,7 +63,7 @@ class ProductItem extends StatelessWidget {
                 ),
               ));
             },
-            color: Theme.of(context).accentColor,
+            color: Colors.amber,
           ),
           title: Text(
             product.title,
