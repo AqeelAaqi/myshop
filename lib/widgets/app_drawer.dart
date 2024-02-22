@@ -4,6 +4,8 @@ import 'package:myshop/providers/auth.dart';
 import 'package:myshop/screens/orders_screen.dart';
 import 'package:myshop/screens/user_product_screen.dart';
 import 'package:provider/provider.dart';
+import '../screens/get_test_data.dart';
+import '../screens/userdata_screen.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
@@ -39,6 +41,17 @@ class AppDrawer extends StatelessWidget {
             title: Text('Manage Products'),
             onTap: (){
               Navigator.of(context).pushReplacementNamed(UserProductsScreen.routeName);
+            },
+          ),
+          Divider(),
+          ListTile(
+            leading: Icon(Icons.edit),
+            title: Text('Test Dio'),
+            onTap: (){
+              // Navigator.of(context).pushReplacementNamed(UserDataScreen.routeName);
+              Navigator.pop(context);
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserDataScreen()));
+
             },
           ),
           Divider(),

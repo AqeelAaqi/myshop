@@ -100,7 +100,7 @@ class Products with ChangeNotifier {
       _items = loadedProducts;
       notifyListeners();
     } catch (Exception) {
-      throw (Exception);
+      print(Exception);
     }
   }
 

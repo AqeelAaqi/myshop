@@ -1,7 +1,6 @@
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:myshop/models/http_exceptions.dart';
-import 'package:myshop/models/http_exceptions.dart';
 import 'package:myshop/providers/auth.dart';
 import 'dart:math';
 
@@ -57,7 +56,7 @@ class AuthScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                      child: Text(
+                      child: const Text(
                         'My Shop',
                         style: TextStyle(
                           color: Colors.amber,

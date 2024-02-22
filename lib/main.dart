@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:myshop/helpers/custom_route.dart';
 import 'package:myshop/providers/cart.dart';
+import 'package:myshop/providers/data_provider.dart';
 import 'package:myshop/providers/orders.dart';
 import 'package:myshop/providers/products.dart';
 import 'package:myshop/screens/auth_screen.dart';
 import 'package:myshop/screens/cart_screen.dart';
 import 'package:myshop/screens/edit_product_screen.dart';
+import 'package:myshop/screens/get_test_data.dart';
 import 'package:myshop/screens/orders_screen.dart';
 import 'package:myshop/screens/product_detail_screen.dart';
 import 'package:myshop/screens/product_overview_screen.dart';
@@ -13,6 +15,7 @@ import 'package:myshop/screens/splash_screen.dart';
 import 'package:myshop/screens/user_product_screen.dart';
 import 'package:provider/provider.dart';
 import 'providers/auth.dart';
+import 'screens/userdata_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -36,6 +39,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (ctx) => Cart(),
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => UserDataProvider(),
         ),
         ChangeNotifierProxyProvider<Auth, Orders>(
           create: (ctx) => Orders('', '', []),
@@ -76,6 +82,7 @@ class MyApp extends StatelessWidget {
             UserProductsScreen.routeName: (ctx) => UserProductsScreen(),
             EditProductScreen.routeName: (ctx) => EditProductScreen(),
             AuthScreen.routeName: (ctx) => AuthScreen(),
+            UserDataScreen.routeName: (ctx) => UserDataScreen(),
           },
         ),
       ),
